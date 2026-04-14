@@ -1,0 +1,544 @@
+---
+/**
+ * Navbar.astro — Sticky navigation with glassmorphism,
+ * language flags, cart bag icon with badge, and mobile hamburger.
+ */
+---
+
+<header class="navbar" id="navbar">
+  <div class="navbar__inner container">
+    <!-- Logo -->
+    <a href="#hero" class="navbar__logo" aria-label="Bandhú Spa Home">
+      <img src="/images/logo-hero.png" alt="Bandhú Spa" width="40" height="40" />
+      <span class="navbar__brand">bandhú</span>
+    </a>
+
+    <!-- Desktop Nav Links -->
+    <nav class="navbar__links" id="navLinks" aria-label="Main navigation">
+      <a href="#hero" class="navbar__link" data-i18n-es="Inicio" data-i18n-en="Home">Inicio</a>
+      <a href="#servicios" class="navbar__link" data-i18n-es="Servicios" data-i18n-en="Services">Servicios</a>
+      <a href="#galeria" class="navbar__link" data-i18n-es="Galería" data-i18n-en="Gallery">Galería</a>
+      <a href="#testimonios" class="navbar__link" data-i18n-es="Testimonios" data-i18n-en="Testimonials">Testimonios</a>
+      <a href="#contacto" class="navbar__link" data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</a>
+      <a href="#faq" class="navbar__link">FAQ</a>
+    </nav>
+
+    <!-- Right Actions -->
+    <div class="navbar__actions">
+      <!-- Language Dropdown -->
+      <div class="navbar__lang" id="langDropdown">
+        <button class="navbar__lang-trigger" id="langTrigger" aria-label="Select language" aria-expanded="false">
+          <span class="navbar__lang-flag" id="currentFlag">
+            <!-- MX flag default -->
+            <svg width="24" height="16" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" style="border-radius:2px;display:block">
+              <rect width="300" height="600" fill="#006847"/>
+              <rect x="300" width="300" height="600" fill="#fff"/>
+              <rect x="600" width="300" height="600" fill="#ce1126"/>
+              <ellipse cx="450" cy="300" rx="54" ry="54" fill="#fff"/>
+              <ellipse cx="450" cy="300" rx="36" ry="36" fill="#5c8a3c"/>
+            </svg>
+          </span>
+          <svg class="navbar__lang-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="navbar__lang-menu" id="langMenu">
+          <button class="navbar__lang-option" data-lang="es">
+            <svg width="20" height="14" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" style="border-radius:2px;flex-shrink:0">
+              <rect width="300" height="600" fill="#006847"/>
+              <rect x="300" width="300" height="600" fill="#fff"/>
+              <rect x="600" width="300" height="600" fill="#ce1126"/>
+              <ellipse cx="450" cy="300" rx="54" ry="54" fill="#fff"/>
+              <ellipse cx="450" cy="300" rx="36" ry="36" fill="#5c8a3c"/>
+            </svg>
+            <span>Español</span>
+          </button>
+          <button class="navbar__lang-option" data-lang="en">
+            <svg width="20" height="14" viewBox="0 0 1235 650" xmlns="http://www.w3.org/2000/svg" style="border-radius:2px;flex-shrink:0">
+              <rect width="1235" height="650" fill="#B22234"/>
+              <rect y="50" width="1235" height="100" fill="#fff"/>
+              <rect y="200" width="1235" height="100" fill="#fff"/>
+              <rect y="350" width="1235" height="100" fill="#fff"/>
+              <rect y="500" width="1235" height="100" fill="#fff"/>
+              <rect width="494" height="350" fill="#3C3B6E"/>
+            </svg>
+            <span>English</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Cart Bag -->
+      <button class="navbar__cart" id="cartToggle" aria-label="Shopping cart">
+        <svg class="navbar__cart-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span class="navbar__cart-badge" id="cartBadge">0</span>
+      </button>
+
+      <!-- Mobile Hamburger -->
+      <button class="navbar__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="navbar__mobile-overlay" id="mobileOverlay"></div>
+  <nav class="navbar__mobile" id="mobileMenu" aria-label="Mobile navigation">
+    <a href="#hero" class="navbar__mobile-link" data-i18n-es="Inicio" data-i18n-en="Home">Inicio</a>
+    <a href="#servicios" class="navbar__mobile-link" data-i18n-es="Servicios" data-i18n-en="Services">Servicios</a>
+    <a href="#galeria" class="navbar__mobile-link" data-i18n-es="Galería" data-i18n-en="Gallery">Galería</a>
+    <a href="#testimonios" class="navbar__mobile-link" data-i18n-es="Testimonios" data-i18n-en="Testimonials">Testimonios</a>
+    <a href="#contacto" class="navbar__mobile-link" data-i18n-es="Contacto" data-i18n-en="Contact">Contacto</a>
+    <a href="#faq" class="navbar__mobile-link">FAQ</a>
+  </nav>
+</header>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: var(--navbar-height);
+    transition: all var(--transition-base);
+    background: rgba(74, 21, 58, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(212, 162, 100, 0.15);
+  }
+
+  .navbar.scrolled {
+    background: rgba(74, 21, 58, 0.95);
+    box-shadow: 0 4px 30px rgba(74, 21, 58, 0.3);
+  }
+
+  .navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .navbar__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    z-index: 10;
+  }
+
+  .navbar__logo img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+
+  .navbar__brand {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--cream-soft);
+    letter-spacing: 0.02em;
+  }
+
+  .navbar__links {
+    display: none;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  @media (min-width: 1024px) {
+    .navbar__links {
+      display: flex;
+    }
+  }
+
+  .navbar__link {
+    color: var(--cream-soft);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+    position: relative;
+    padding: var(--space-xs) 0;
+  }
+
+  .navbar__link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--orange-accent);
+    transition: width var(--transition-base);
+    border-radius: 1px;
+  }
+
+  .navbar__link:hover {
+    color: var(--orange-accent);
+  }
+
+  .navbar__link:hover::after {
+    width: 100%;
+  }
+
+  .navbar__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    z-index: 10;
+  }
+
+  /* Language dropdown */
+  .navbar__lang {
+    position: relative;
+    z-index: 10;
+  }
+
+  .navbar__lang-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--cream-soft);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .navbar__lang-trigger:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(212, 162, 100, 0.4);
+  }
+
+  .navbar__lang-arrow {
+    opacity: 0.7;
+    transition: transform var(--transition-fast);
+  }
+
+  .navbar__lang.open .navbar__lang-arrow {
+    transform: rotate(180deg);
+  }
+
+  .navbar__lang-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--purple-deep);
+    border: 1px solid rgba(212, 162, 100, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 140px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: all var(--transition-fast);
+    z-index: 999;
+  }
+
+  .navbar__lang.open .navbar__lang-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .navbar__lang-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 16px;
+    color: rgba(250, 245, 237, 0.75);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    text-align: left;
+  }
+
+  .navbar__lang-option:hover {
+    background: rgba(255,255,255,0.08);
+    color: var(--gold-warm);
+  }
+
+  .navbar__lang-option.active {
+    color: var(--gold-warm);
+    background: rgba(212,162,100,0.08);
+  }
+
+  .navbar__cart {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    color: var(--cream-soft);
+    transition: all var(--transition-fast);
+  }
+
+  .navbar__cart:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--orange-accent);
+  }
+
+  .navbar__cart-icon {
+    transition: transform var(--transition-spring);
+  }
+
+  .navbar__cart-icon.bounce {
+    animation: bagBounce 0.6s ease;
+  }
+
+  .navbar__cart-badge {
+    position: absolute;
+    top: 4px;
+    right: 2px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 10px;
+    background: var(--orange-accent);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    opacity: 0;
+    transform: scale(0);
+    transition: all var(--transition-spring);
+  }
+
+  .navbar__cart-badge.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .navbar__cart-badge.pop {
+    animation: badgePop 0.4s ease;
+  }
+
+  /* Hamburger */
+  .navbar__hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 28px;
+    padding: 4px 0;
+    z-index: 10;
+  }
+
+  @media (min-width: 1024px) {
+    .navbar__hamburger {
+      display: none;
+    }
+  }
+
+  .navbar__hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--cream-soft);
+    border-radius: 1px;
+    transition: all var(--transition-base);
+    transform-origin: center;
+  }
+
+  .navbar__hamburger.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .navbar__hamburger.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .navbar__hamburger.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Mobile Menu */
+  .navbar__mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+    z-index: 998;
+  }
+
+  .navbar__mobile-overlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .navbar__mobile {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--purple-deep);
+    padding: calc(var(--navbar-height) + var(--space-xl)) var(--space-xl) var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
+    z-index: 999;
+    border-left: 1px solid rgba(212, 162, 100, 0.2);
+  }
+
+  .navbar__mobile.open {
+    transform: translateX(0);
+  }
+
+  .navbar__mobile-link {
+    color: var(--cream-soft);
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid rgba(212, 162, 100, 0.1);
+    transition: all var(--transition-fast);
+  }
+
+  .navbar__mobile-link:hover {
+    color: var(--orange-accent);
+    padding-left: var(--space-sm);
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var navbar = document.getElementById('navbar');
+    var hamburger = document.getElementById('hamburger');
+    var mobileMenu = document.getElementById('mobileMenu');
+    var mobileOverlay = document.getElementById('mobileOverlay');
+    var cartToggle = document.getElementById('cartToggle');
+    var cartBadge = document.getElementById('cartBadge');
+    var cartIcon = document.querySelector('.navbar__cart-icon');
+
+    /* Scroll effect */
+    window.addEventListener('scroll', function() {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    /* Hamburger toggle */
+    hamburger.addEventListener('click', function() {
+      var isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open');
+      mobileOverlay.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', isOpen);
+      document.body.classList.toggle('no-scroll', isOpen);
+    });
+
+    mobileOverlay.addEventListener('click', closeMobile);
+
+    document.querySelectorAll('.navbar__mobile-link').forEach(function(link) {
+      link.addEventListener('click', closeMobile);
+    });
+
+    function closeMobile() {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      mobileOverlay.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('no-scroll');
+    }
+
+    /* Language dropdown */
+    var langDropdown = document.getElementById('langDropdown');
+    var langTrigger = document.getElementById('langTrigger');
+    var currentFlag = document.getElementById('currentFlag');
+
+    var flags = {
+      es: '<svg width="24" height="16" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" style="border-radius:2px;display:block"><rect width="300" height="600" fill="#006847"/><rect x="300" width="300" height="600" fill="#fff"/><rect x="600" width="300" height="600" fill="#ce1126"/><ellipse cx="450" cy="300" rx="54" ry="54" fill="#fff"/><ellipse cx="450" cy="300" rx="36" ry="36" fill="#5c8a3c"/></svg>',
+      en: '<svg width="24" height="16" viewBox="0 0 1235 650" xmlns="http://www.w3.org/2000/svg" style="border-radius:2px;display:block"><rect width="1235" height="650" fill="#B22234"/><rect y="50" width="1235" height="100" fill="#fff"/><rect y="200" width="1235" height="100" fill="#fff"/><rect y="350" width="1235" height="100" fill="#fff"/><rect y="500" width="1235" height="100" fill="#fff"/><rect width="494" height="350" fill="#3C3B6E"/></svg>'
+    };
+
+    function setActiveOption(lang) {
+      if (currentFlag) currentFlag.innerHTML = flags[lang] || flags.es;
+      document.querySelectorAll('.navbar__lang-option').forEach(function(o) {
+        o.classList.toggle('active', o.dataset.lang === lang);
+      });
+    }
+
+    /* Initialize flag on load */
+    setActiveOption(window.SPA_LANG || 'es');
+
+    if (langTrigger) {
+      langTrigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = langDropdown.classList.toggle('open');
+        langTrigger.setAttribute('aria-expanded', isOpen);
+      });
+    }
+
+    document.querySelectorAll('.navbar__lang-option').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var lang = btn.dataset.lang;
+        window.setLanguage(lang);
+        setActiveOption(lang);
+        langDropdown.classList.remove('open');
+        langTrigger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    /* Close dropdown on outside click */
+    document.addEventListener('click', function() {
+      if (langDropdown) {
+        langDropdown.classList.remove('open');
+        if (langTrigger) langTrigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    /* Also update flag on language change from other triggers */
+    window.addEventListener('languageChanged', function(e) {
+      setActiveOption(e.detail.lang);
+    });
+
+    /* Cart badge */
+    function updateBadge() {
+      var count = window.getCartCount();
+      cartBadge.textContent = count;
+      cartBadge.classList.toggle('show', count > 0);
+    }
+    updateBadge();
+
+    window.addEventListener('cartUpdated', function() {
+      updateBadge();
+      cartBadge.classList.remove('pop');
+      void cartBadge.offsetWidth;
+      cartBadge.classList.add('pop');
+      cartIcon.classList.remove('bounce');
+      void cartIcon.offsetWidth;
+      cartIcon.classList.add('bounce');
+    });
+
+    /* Cart toggle */
+    cartToggle.addEventListener('click', function() {
+      if (window.openCartDrawer) {
+        window.openCartDrawer();
+      } else {
+        var drawer = document.getElementById('cartDrawer');
+        var overlay = document.getElementById('cartOverlay');
+        if (drawer && overlay) {
+          drawer.classList.add('open');
+          overlay.classList.add('open');
+          document.body.classList.add('no-scroll');
+          window.dispatchEvent(new CustomEvent('cartOpened'));
+        }
+      }
+    });
+  })();
+</script>

@@ -1,0 +1,312 @@
+---
+/**
+ * Hero.astro — Premium Hero for Bandhú Spa
+ * Refined layout, robust centering, and elegant animations.
+ */
+---
+
+<section class="hero" id="hero">
+  <!-- Dynamic Orbs Background -->
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__orb hero__orb--1"></div>
+    <div class="hero__orb hero__orb--2"></div>
+    <div class="hero__orb hero__orb--3"></div>
+  </div>
+
+  <div class="hero__content">
+    <!-- Brand Image / Logo -->
+    <div class="hero__logo-container">
+      <img
+        src="/images/logo-hero.png"
+        alt="Bandhú Spa Logo"
+        class="hero__logo"
+        width="150"
+        height="150"
+        loading="eager"
+      />
+    </div>
+
+    <!-- Branding Header -->
+    <div class="hero__brand">
+      <div class="hero__line"></div>
+      <span class="hero__name">bandhú spa</span>
+      <div class="hero__line"></div>
+    </div>
+
+    <!-- Main Title -->
+    <h1 class="hero__title" data-i18n-es="Tu Santuario de Bienestar" data-i18n-en="Your Wellness Sanctuary">
+      Tu Santuario de Bienestar
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="hero__subtitle" data-i18n-es="Experimenta la verdadera relajación en un ambiente de lujo y serenidad diseñado para tu renovación total." data-i18n-en="Experience true relaxation in a luxury and serene environment designed for your total renewal.">
+      Experimenta la verdadera relajación en un ambiente de lujo y serenidad diseñado para tu renovación total.
+    </p>
+
+    <!-- CTAs -->
+    <div class="hero__actions">
+      <a href="#servicios" class="hero__btn hero__btn--primary" data-i18n-es="Explorar Servicios" data-i18n-en="Explore Services">
+        Explorar Servicios
+      </a>
+      <a href="#contacto" class="hero__btn hero__btn--outline" data-i18n-es="Contáctanos" data-i18n-en="Contact Us">
+        Contáctanos
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll Down Indicator -->
+  <div class="hero__scroll-indicator">
+    <span class="hero__scroll-label" data-i18n-es="Desliza" data-i18n-en="Scroll">Desliza</span>
+    <div class="hero__mouse">
+      <div class="hero__wheel"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--purple-deep);
+    overflow: hidden;
+    padding: var(--space-xl);
+    text-align: center;
+  }
+
+  /* Background elements */
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .hero__orb {
+    position: absolute;
+    border-radius: var(--radius-full);
+    filter: blur(80px);
+    opacity: 0.15;
+  }
+
+  .hero__orb--1 {
+    top: -10%;
+    right: -5%;
+    width: 50vw;
+    height: 50vw;
+    background: var(--gold-warm);
+    animation: floatOrb 15s ease-in-out infinite alternate;
+  }
+
+  .hero__orb--2 {
+    bottom: -10%;
+    left: -5%;
+    width: 40vw;
+    height: 40vw;
+    background: var(--purple-light);
+    animation: floatOrb 18s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes floatOrb {
+    from { transform: translate(0, 0); }
+    to { transform: translate(30px, 40px); }
+  }
+
+  /* Main Container */
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    max-width: 850px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  /* Logo Styling */
+  .hero__logo-container {
+    margin-bottom: var(--space-sm);
+    animation: fadeInDown 1.2s ease-out forwards;
+  }
+
+  .hero__logo {
+    width: clamp(100px, 18vw, 150px);
+    height: auto;
+    filter: drop-shadow(0 0 20px rgba(212, 162, 100, 0.2));
+  }
+
+  /* Branding Line */
+  .hero__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    animation: fadeIn 1s ease-out 0.4s both;
+  }
+
+  .hero__line {
+    width: 40px;
+    height: 1px;
+    background: var(--gold-warm);
+    opacity: 0.6;
+  }
+
+  .hero__name {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold-warm) !important;
+  }
+
+  /* Title */
+  .hero__title {
+    font-size: clamp(2.4rem, 7vw, 4.5rem);
+    color: #FFFFFF !important;
+    line-height: 1.1;
+    margin: 0;
+    font-weight: 700;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: fadeInUp 1s ease-out 0.6s both;
+  }
+
+  /* Subtitle */
+  .hero__subtitle {
+    font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+    color: #FAF5ED !important;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: var(--space-sm) 0;
+    line-height: 1.6;
+    animation: fadeInUp 1s ease-out 0.8s both;
+  }
+
+  /* Actions */
+  .hero__actions {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeInUp 1.2s ease-out 1s both;
+  }
+
+  .hero__btn {
+    padding: 1rem 2.2rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-base);
+    text-decoration: none;
+    min-width: 200px;
+  }
+
+  .hero__btn--primary {
+    background: var(--gold-warm);
+    color: var(--purple-deep);
+    box-shadow: 0 4px 20px rgba(212, 162, 100, 0.3);
+  }
+
+  .hero__btn--primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(212, 162, 100, 0.5);
+  }
+
+  .hero__btn--outline {
+    background: transparent;
+    color: var(--cream-soft);
+    border: 1px solid rgba(250, 245, 237, 0.3);
+  }
+
+  .hero__btn--outline:hover {
+    border-color: var(--gold-warm);
+    color: var(--gold-warm);
+    transform: translateY(-3px);
+  }
+
+  /* Scroll Indicator */
+  .hero__scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+    animation: fadeIn 1s ease-out 2s both;
+  }
+
+  .hero__scroll-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(250, 245, 237, 0.4);
+    font-weight: 600;
+  }
+
+  .hero__mouse {
+    width: 20px;
+    height: 32px;
+    border: 1.5px solid rgba(250, 245, 237, 0.3);
+    border-radius: 12px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero__wheel {
+    width: 3px;
+    height: 6px;
+    background: var(--gold-warm);
+    border-radius: 2px;
+    margin-top: 6px;
+    animation: scrollMove 2s infinite;
+  }
+
+  @keyframes scrollMove {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(12px); opacity: 0; }
+  }
+
+  /* Entry Animations */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Responsive Fixes */
+  @media (max-width: 600px) {
+    .hero {
+      padding: var(--space-md);
+    }
+    .hero__actions {
+      width: 100%;
+    }
+    .hero__btn {
+      width: 100%;
+      min-width: unset;
+    }
+    .hero__line {
+      width: 30px;
+    }
+  }
+</style>

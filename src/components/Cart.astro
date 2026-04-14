@@ -1,0 +1,683 @@
+---
+/**
+ * Cart.astro — Premium Spa Booking Drawer
+ * Inspired by Lotus-Om Spa: editorial hierarchy, minimalist inputs with
+ * only bottom border, compact service cards, Bandhú color palette.
+ */
+---
+
+<div class="cart-overlay" id="cartOverlay"></div>
+
+<aside class="cart" id="cartDrawer" role="dialog" aria-modal="true">
+
+  <!-- ── Header ── -->
+  <div class="cart__header">
+    <div class="cart__header-left">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <span class="cart__title-has" id="cartTitleHas" data-i18n-es="Tu Reservación" data-i18n-en="Your Booking">Tu Reservación</span>
+      <span class="cart__count" id="cartCount"></span>
+    </div>
+    <button class="cart__close" id="cartClose" aria-label="Cerrar">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ── Body (scrollable) ── -->
+  <div class="cart__body">
+
+    <!-- SECTION: Tus Datos -->
+    <div class="cart__section">
+      <h3 class="cart__section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span data-i18n-es="TUS DATOS" data-i18n-en="YOUR DETAILS">TUS DATOS</span>
+      </h3>
+      <div class="cart__field">
+        <label class="cart__label" for="cartName" data-i18n-es="NOMBRE COMPLETO" data-i18n-en="FULL NAME">NOMBRE COMPLETO</label>
+        <input class="cart__input" id="cartName" type="text" autocomplete="off" data-i18n-placeholder-es="Escribe tu nombre..." data-i18n-placeholder-en="Enter your name..." placeholder="Escribe tu nombre..."/>
+      </div>
+    </div>
+
+    <div class="cart__sep"></div>
+
+    <!-- SECTION: Detalles de Cita -->
+    <div class="cart__section">
+      <h3 class="cart__section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span data-i18n-es="DETALLES DE CITA" data-i18n-en="APPOINTMENT DETAILS">DETALLES DE CITA</span>
+      </h3>
+      <div class="cart__row">
+        <div class="cart__field">
+          <label class="cart__label" for="cartDate" data-i18n-es="FECHA DESEADA" data-i18n-en="PREFERRED DATE">FECHA DESEADA</label>
+          <input class="cart__input" id="cartDate" type="date"/>
+        </div>
+        <div class="cart__field">
+          <label class="cart__label" data-i18n-es="PERSONAS" data-i18n-en="PEOPLE">PERSONAS</label>
+          <div class="cart__persons-line">
+            <button class="cart__persons-btn" id="personsDec">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <span class="cart__persons-val" id="personsVal">1</span>
+            <button class="cart__persons-btn" id="personsInc">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart__sep" id="itemsSep"></div>
+
+    <!-- SECTION: Tratamientos -->
+    <div class="cart__section" id="treatmentsSection">
+      <h3 class="cart__section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        <span data-i18n-es="TRATAMIENTOS SELECCIONADOS" data-i18n-en="SELECTED TREATMENTS">TRATAMIENTOS SELECCIONADOS</span>
+      </h3>
+      <div class="cart__items" id="cartItems"></div>
+    </div>
+      <div class="cart__empty" id="cartEmpty">
+        <p data-i18n-es="Aún no has seleccionado ningún tratamiento." data-i18n-en="You haven't selected any treatments yet.">Aún no has seleccionado ningún tratamiento.</p>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- ── Footer ── -->
+  <div class="cart__footer">
+    <div class="cart__total-row">
+      <span class="cart__total-label" data-i18n-es="TOTAL ESTIMADO" data-i18n-en="ESTIMATED TOTAL">TOTAL ESTIMADO</span>
+      <span class="cart__total-val" id="cartTotalPrice">$0 MXN</span>
+    </div>
+
+    <p class="cart__error" id="cartError"></p>
+
+    <button class="cart__cta" id="cartSubmit" data-i18n-es="SOLICITAR DISPONIBILIDAD" data-i18n-en="REQUEST AVAILABILITY">
+      SOLICITAR DISPONIBILIDAD
+    </button>
+
+    <p class="cart__note" data-i18n-es="Al solicitar disponibilidad, se abrirá un chat de WhatsApp con los detalles de tu reservación para confirmar horarios." data-i18n-en="When requesting availability, a WhatsApp chat will open with your booking details to confirm times.">
+      Al solicitar disponibilidad, se abrirá un chat de WhatsApp con los detalles de tu reservación para confirmar horarios.
+    </p>
+
+    <button class="cart__continue" id="keepBrowsing" data-i18n-es="CONTINUAR EXPLORANDO" data-i18n-en="CONTINUE EXPLORING">
+      CONTINUAR EXPLORANDO
+    </button>
+  </div>
+
+</aside>
+
+<!-- ── Floating Cart Bubble ── -->
+<div class="cart-bubble" id="cartBubble">
+  <button id="cartBubbleBtn" aria-label="Abrir reservación">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 01-8 0"/>
+    </svg>
+    <span class="cart-bubble__count" id="bubbleCount">0</span>
+  </button>
+</div>
+
+<style is:global>
+  /* ── Overlay ── */
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(20, 5, 15, 0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 3000;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+  .cart-overlay.open { opacity: 1; visibility: visible; }
+
+  /* ── Drawer ── */
+  .cart {
+    position: fixed;
+    top: 0; right: 0;
+    width: min(430px, 100vw);
+    height: 100vh; height: 100dvh;
+    background: var(--cart-cream, #F5EDE3);
+    z-index: 3001;
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 60px rgba(74, 21, 58, 0.15);
+  }
+  .cart.open { transform: translateX(0); }
+
+  /* ── Header ── */
+  .cart__header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    background: white;
+    border-bottom: 1px solid rgba(74, 21, 58, 0.07);
+    flex-shrink: 0;
+  }
+  .cart__header-left {
+    display: flex; align-items: center; gap: 0.6rem;
+    color: var(--purple-deep);
+  }
+  .cart__title-has {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--purple-deep);
+    letter-spacing: 0.01em;
+  }
+  .cart__count {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--purple-medium);
+    font-weight: 400;
+  }
+  .cart__close {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    color: var(--purple-deep);
+    opacity: 0.45;
+    transition: opacity 0.2s, background 0.2s;
+  }
+  .cart__close:hover { opacity: 1; background: rgba(74, 21, 58, 0.06); }
+
+  /* ── Body ── */
+  .cart__body {
+    flex: 1; overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(74, 21, 58, 0.2) transparent;
+  }
+  .cart__body::-webkit-scrollbar { width: 4px; }
+  .cart__body::-webkit-scrollbar-thumb { background: rgba(74, 21, 58, 0.18); border-radius: 4px; }
+
+  /* ── Section ── */
+  .cart__section { padding: 1.4rem 1.5rem; display: flex; flex-direction: column; gap: 1.1rem; }
+  .cart__section-title {
+    display: flex; align-items: center; gap: 0.55rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.18em;
+    color: var(--purple-medium);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .cart__sep { height: 1px; background: rgba(74, 21, 58, 0.08); margin: 0; }
+
+  /* ── Fields ── */
+  .cart__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: end; }
+  .cart__field { display: flex; flex-direction: column; gap: 0.45rem; }
+  .cart__label {
+    font-size: 0.6rem;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.18em;
+    color: rgba(74, 21, 58, 0.45);
+  }
+  .cart__input {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid rgba(74, 21, 58, 0.2);
+    padding: 0.65rem 0 0.5rem;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--purple-deep);
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .cart__input:focus { border-bottom-color: var(--purple-deep); }
+  .cart__input.error { border-bottom-color: #B83232; }
+  .cart__input::placeholder { color: rgba(74, 21, 58, 0.25); }
+
+  /* ── Persons Control ── */
+  .cart__persons-line {
+    display: flex;
+    align-items: center;
+    border-bottom: 1.5px solid rgba(74, 21, 58, 0.2);
+    height: 42px;
+  }
+  .cart__persons-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    color: rgba(74, 21, 58, 0.5);
+    transition: color 0.15s;
+    border-radius: 50%;
+  }
+  .cart__persons-btn:hover { color: var(--purple-deep); background: rgba(74, 21, 58, 0.05); }
+  .cart__persons-val {
+    flex: 1; text-align: center;
+    font-size: 0.9rem; font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    color: var(--purple-deep);
+  }
+
+  /* ── Service Items ── */
+  .cart__items { display: flex; flex-direction: column; gap: 0.85rem; }
+
+  .cart__item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1.15rem !important;
+    background: #F9F4ED !important; /* Premium light cream */
+    padding: 0.9rem !important;
+    border-radius: 18px !important;
+    border: 1px solid rgba(74, 21, 58, 0.05) !important;
+    margin-bottom: 0.85rem !important;
+    box-shadow: 0 2px 10px rgba(74, 21, 58, 0.03) !important;
+    animation: itemSlideIn 0.35s ease;
+  }
+  @keyframes itemSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .cart__item-img {
+    width: 84px !important;
+    height: 84px !important;
+    border-radius: 14px !important;
+    object-fit: cover !important;
+    flex-shrink: 0 !important;
+    background: rgba(74, 21, 58, 0.05);
+  }
+
+  .cart__item-info {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    min-width: 0 !important;
+    height: 84px !important;
+  }
+
+  .cart__item-top {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+  }
+
+  .cart__item-name {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    color: var(--purple-deep) !important;
+    line-height: 1.15 !important;
+    margin: 0 !important;
+  }
+
+  .cart__item-duration {
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+    font-family: 'Inter', sans-serif !important;
+    letter-spacing: 0.18em !important;
+    color: var(--purple-medium) !important;
+    text-transform: uppercase !important;
+    margin-top: 3px !important;
+  }
+
+  .cart__item-trash {
+    color: rgba(74, 21, 58, 0.25) !important;
+    transition: color 0.2s !important;
+    padding: 2px !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+  .cart__item-trash:hover { color: #B83232 !important; }
+
+  .cart__item-bottom {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    width: 100% !important;
+  }
+
+  .cart__item-price {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    color: var(--purple-deep) !important;
+    letter-spacing: -0.02em !important;
+    margin: 0 !important;
+  }
+
+  .cart__item-qty {
+    display: flex !important;
+    align-items: center !important;
+    background: white !important;
+    border: 1px solid rgba(74, 21, 58, 0.1) !important;
+    border-radius: 10px !important;
+    padding: 1px !important;
+  }
+  .cart__item-qty-btn {
+    width: 28px !important;
+    height: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+    color: rgba(74, 21, 58, 0.4) !important;
+    transition: color 0.2s !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+  .cart__item-qty-btn:hover { color: var(--purple-deep) !important; }
+  .cart__item-qty-val {
+    width: 20px !important;
+    text-align: center !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    font-family: 'Inter', sans-serif !important;
+    color: var(--purple-deep) !important;
+  }
+
+  /* ── Empty State ── */
+  .cart__empty {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+  }
+  .cart__empty.show { display: block; }
+  .cart__empty p {
+    font-size: 0.82rem;
+    font-style: italic;
+    color: rgba(74, 21, 58, 0.4);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+  }
+
+  /* ── Footer ── */
+  .cart__footer {
+    flex-shrink: 0;
+    background: white;
+    border-top: 1px solid rgba(74, 21, 58, 0.08);
+    padding: 1.4rem 1.5rem 1.75rem;
+    display: flex; flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cart__total-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .cart__total-label {
+    font-size: 0.65rem; font-weight: 800;
+    letter-spacing: 0.2em;
+    font-family: 'Inter', sans-serif;
+    color: rgba(74, 21, 58, 0.45);
+  }
+  .cart__total-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    color: var(--purple-deep);
+    letter-spacing: -0.02em;
+  }
+
+  /* Error */
+  .cart__error {
+    display: none;
+    font-size: 0.75rem; font-weight: 700;
+    color: #B83232;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    animation: pulse 0.5s ease;
+  }
+  .cart__error.show { display: block; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  /* CTA Button */
+  .cart__cta {
+    width: 100%;
+    padding: 1.1rem 1rem;
+    background: var(--purple-deep);
+    color: var(--cream-soft);
+    border-radius: 40px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem; font-weight: 800;
+    letter-spacing: 0.22em;
+    text-align: center;
+    transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    box-shadow: 0 4px 20px rgba(74, 21, 58, 0.25);
+  }
+  .cart__cta:hover {
+    background: var(--purple-medium);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(74, 21, 58, 0.35);
+  }
+  .cart__cta:active { transform: translateY(0); }
+  .cart__cta:disabled {
+    background: rgba(74, 21, 58, 0.25);
+    cursor: not-allowed; transform: none; box-shadow: none;
+  }
+
+  .cart__note {
+    font-size: 0.7rem; font-style: italic;
+    line-height: 1.55;
+    color: rgba(74, 21, 58, 0.4);
+    font-family: 'Inter', sans-serif;
+    text-align: center; margin: 0;
+  }
+
+  .cart__continue {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem; font-weight: 800;
+    letter-spacing: 0.22em;
+    color: rgba(74, 21, 58, 0.4);
+    text-align: center;
+    padding: 0.35rem;
+    transition: color 0.2s;
+  }
+  .cart__continue:hover { color: var(--purple-deep); }
+
+  /* ── Floating Bubble ── */
+  .cart-bubble {
+    position: fixed;
+    bottom: 1.5rem; right: 1.5rem;
+    z-index: 2999;
+    opacity: 0; visibility: hidden;
+    transform: scale(0.7);
+    transition: opacity 0.3s, visibility 0.3s, transform 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  .cart-bubble.show {
+    opacity: 1; visibility: visible; transform: scale(1);
+  }
+  .cart-bubble button {
+    position: relative;
+    width: 56px; height: 56px;
+    background: var(--purple-deep);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    box-shadow: 0 8px 24px rgba(74, 21, 58, 0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cart-bubble button:hover { transform: scale(1.1); box-shadow: 0 12px 30px rgba(74, 21, 58, 0.55); }
+  .cart-bubble__count {
+    position: absolute; top: -5px; right: -5px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--orange-accent);
+    color: white;
+    font-size: 0.7rem; font-weight: 800;
+    font-family: 'Inter', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid white;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var drawer    = document.getElementById('cartDrawer');
+    var overlay   = document.getElementById('cartOverlay');
+    var closeBtn  = document.getElementById('cartClose');
+    var keepBtn   = document.getElementById('keepBrowsing');
+    var itemsEl   = document.getElementById('cartItems');
+    var emptyEl   = document.getElementById('cartEmpty');
+    var totalEl   = document.getElementById('cartTotalPrice');
+    var countEl   = document.getElementById('cartCount');
+    var errorEl   = document.getElementById('cartError');
+    var nameIn    = document.getElementById('cartName');
+    var dateIn    = document.getElementById('cartDate');
+    var pValEl    = document.getElementById('personsVal');
+    var pDec      = document.getElementById('personsDec');
+    var pInc      = document.getElementById('personsInc');
+    var submitBtn = document.getElementById('cartSubmit');
+    var bubble    = document.getElementById('cartBubble');
+    var bubbleBtn = document.getElementById('cartBubbleBtn');
+    var bubbleCnt = document.getElementById('bubbleCount');
+
+    var persons = 1;
+    var today = new Date().toISOString().split('T')[0];
+    dateIn.setAttribute('min', today);
+
+    function openCart() {
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+      document.body.classList.add('no-scroll');
+      window.dispatchEvent(new CustomEvent('cartOpened'));
+    }
+
+    function closeCart() {
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+      document.body.classList.remove('no-scroll');
+    }
+
+    closeBtn.addEventListener('click', closeCart);
+    overlay.addEventListener('click', closeCart);
+    keepBtn.addEventListener('click', closeCart);
+    bubbleBtn.addEventListener('click', openCart);
+
+    pDec.addEventListener('click', function () { if (persons > 1) { persons--; pValEl.textContent = persons; } });
+    pInc.addEventListener('click', function () { if (persons < 20) { persons++; pValEl.textContent = persons; } });
+
+    function duration(price) {
+      if (price >= 1000) return '90 MIN';
+      if (price >= 700)  return '60 MIN';
+      return '50 MIN';
+    }
+
+    function render() {
+      var cart  = window.SPA_CART || [];
+      var lang  = window.SPA_LANG || 'es';
+      var count = cart.reduce(function (s, i) { return s + i.qty; }, 0);
+      var total = window.getCartTotal ? window.getCartTotal() : 0;
+
+      /* Count badge in header */
+      countEl.textContent = count > 0 ? '(' + count + ')' : '';
+
+      /* Total */
+      totalEl.textContent = '$' + total.toLocaleString() + ' MXN';
+
+      /* Bubble */
+      bubbleCnt.textContent = count;
+      bubble.classList.toggle('show', count > 0);
+
+      /* Items */
+      errorEl.classList.remove('show');
+
+      if (cart.length === 0) {
+        itemsEl.innerHTML = '';
+        emptyEl.classList.add('show');
+      } else {
+        emptyEl.classList.remove('show');
+        itemsEl.innerHTML = cart.map(function (item) {
+          var name = typeof item.name === 'object' ? (item.name[lang] || item.name.es) : item.name;
+          var price = Number(item.price);
+          return (
+            '<div class="cart__item">' +
+              '<img class="cart__item-img" src="' + (item.image || '') + '" alt="' + name + '" loading="lazy"/>' +
+              '<div class="cart__item-info">' +
+                '<div class="cart__item-top">' +
+                  '<div>' +
+                    '<div class="cart__item-name">' + name + '</div>' +
+                    '<div class="cart__item-duration">' + duration(price) + '</div>' +
+                  '</div>' +
+                  '<button class="cart__item-trash" data-id="' + item.id + '" data-action="del" aria-label="Eliminar">' +
+                    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>' +
+                  '</button>' +
+                '</div>' +
+                '<div class="cart__item-bottom">' +
+                  '<span class="cart__item-price">$' + price.toLocaleString() + ' MXN</span>' +
+                  '<div class="cart__item-qty">' +
+                    '<button class="cart__item-qty-btn" data-id="' + item.id + '" data-action="dec">−</button>' +
+                    '<span class="cart__item-qty-val">' + item.qty + '</span>' +
+                    '<button class="cart__item-qty-btn" data-id="' + item.id + '" data-action="inc">+</button>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+
+        itemsEl.querySelectorAll('[data-action]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.dataset.id;
+            var action = btn.dataset.action;
+            if (action === 'dec' && window.updateCartQty) window.updateCartQty(id, -1);
+            if (action === 'inc' && window.updateCartQty) window.updateCartQty(id, 1);
+            if (action === 'del' && window.removeFromCart) window.removeFromCart(id);
+          });
+        });
+      }
+    }
+
+    /* Submit → WhatsApp */
+    submitBtn.addEventListener('click', function () {
+      var lang = window.SPA_LANG || 'es';
+      var cart = window.SPA_CART || [];
+
+      errorEl.classList.remove('show');
+      nameIn.classList.remove('error');
+      dateIn.classList.remove('error');
+
+      if (cart.length === 0) {
+        errorEl.textContent = lang === 'es' ? 'Agrega al menos un tratamiento.' : 'Add at least one treatment.';
+        errorEl.classList.add('show'); return;
+      }
+      if (!nameIn.value.trim()) {
+        nameIn.classList.add('error');
+        errorEl.textContent = lang === 'es' ? 'Escribe tu nombre completo.' : 'Enter your full name.';
+        errorEl.classList.add('show'); return;
+      }
+      if (!dateIn.value) {
+        dateIn.classList.add('error');
+        errorEl.textContent = lang === 'es' ? 'Elige una fecha deseada.' : 'Choose a preferred date.';
+        errorEl.classList.add('show'); return;
+      }
+
+      var servicios = cart.map(function (i) {
+        var n = typeof i.name === 'object' ? (i.name[lang] || i.name.es) : i.name;
+        return '  • ' + n + ' ×' + i.qty + ' — $' + (Number(i.price) * i.qty).toLocaleString() + ' MXN';
+      }).join('\n');
+
+      var total = window.getCartTotal ? window.getCartTotal() : 0;
+
+      var msg = '🌿 *SOLICITUD DE RESERVA — BANDHÚ SPA*\n\n' +
+                '👤 *Nombre:* ' + nameIn.value.trim() + '\n' +
+                '📅 *Fecha deseada:* ' + dateIn.value + '\n' +
+                '👥 *Personas:* ' + persons + '\n\n' +
+                '💆 *Tratamientos:*\n' + servicios + '\n\n' +
+                '💰 *Total estimado:* $' + total.toLocaleString() + ' MXN\n\n' +
+                '_Por favor confirma disponibilidad y horario._';
+
+      window.open('https://wa.me/524445451940?text=' + encodeURIComponent(msg), '_blank');
+    });
+
+    window.addEventListener('cartUpdated', render);
+    window.addEventListener('cartOpened', render);
+    window.addEventListener('languageChanged', render);
+
+    /* Expose openCart globally so Navbar button can call it */
+    window.openCartDrawer = openCart;
+  })();
+</script>

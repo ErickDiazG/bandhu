@@ -1,0 +1,182 @@
+---
+/**
+ * FAQ.astro — Accordion with 5 frequently asked questions.
+ * Smooth expand/collapse with plus/minus icon toggle.
+ */
+import { translations } from '../data/translations.js';
+
+const faqItems = translations.es.faq.items;
+const faqItemsEn = translations.en.faq.items;
+---
+
+<section class="faq section-padding" id="faq">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 data-i18n-es="Preguntas Frecuentes" data-i18n-en="Frequently Asked Questions">Preguntas Frecuentes</h2>
+      <p data-i18n-es="¿Tienes dudas? Aquí te ayudamos" data-i18n-en="Have questions? We can help">
+        ¿Tienes dudas? Aquí te ayudamos
+      </p>
+    </div>
+
+    <div class="faq__list">
+      {faqItems.map((item, idx) => (
+        <div class="faq__item reveal" style={`animation-delay: ${idx * 0.1}s`}>
+          <button
+            class="faq__question"
+            aria-expanded="false"
+            aria-controls={`faq-answer-${idx}`}
+          >
+            <span
+              data-i18n-es={item.question}
+              data-i18n-en={faqItemsEn[idx].question}
+            >
+              {item.question}
+            </span>
+            <span class="faq__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19" class="faq__icon-v"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq__answer" id={`faq-answer-${idx}`} role="region">
+            <p
+              data-i18n-es={item.answer}
+              data-i18n-en={faqItemsEn[idx].answer}
+            >
+              {item.answer}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    background: var(--purple-deep);
+  }
+
+  .faq .section-header h2 {
+    color: var(--cream-soft);
+  }
+
+  .faq .section-header p {
+    color: rgba(250, 245, 237, 0.65);
+  }
+
+  .faq__list {
+    max-width: 750px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .faq__item {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(212, 162, 100, 0.15);
+    overflow: hidden;
+    transition: all var(--transition-base);
+  }
+
+  .faq__item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(212, 162, 100, 0.3);
+  }
+
+  .faq__item.open {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--gold-warm);
+  }
+
+  .faq__question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-lg) var(--space-xl);
+    color: var(--cream-soft);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: left;
+    font-family: var(--font-body);
+    transition: color var(--transition-fast);
+  }
+
+  .faq__question:hover {
+    color: var(--gold-warm);
+  }
+
+  .faq__icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    background: rgba(212, 162, 100, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-warm);
+    transition: all var(--transition-base);
+  }
+
+  .faq__item.open .faq__icon {
+    background: var(--gold-warm);
+    color: var(--purple-deep);
+    transform: rotate(180deg);
+  }
+
+  .faq__icon-v {
+    transition: all var(--transition-base);
+  }
+
+  .faq__item.open .faq__icon-v {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+
+  .faq__answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0 var(--space-xl);
+  }
+
+  .faq__item.open .faq__answer {
+    max-height: 300px;
+    padding: 0 var(--space-xl) var(--space-lg);
+  }
+
+  .faq__answer p {
+    color: rgba(250, 245, 237, 0.7);
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    document.querySelectorAll('.faq__question').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item = btn.closest('.faq__item');
+        var isOpen = item.classList.contains('open');
+
+        /* Close all others */
+        document.querySelectorAll('.faq__item.open').forEach(function(openItem) {
+          openItem.classList.remove('open');
+          openItem.querySelector('.faq__question').setAttribute('aria-expanded', 'false');
+        });
+
+        if (!isOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  })();
+</script>

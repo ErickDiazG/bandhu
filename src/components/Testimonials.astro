@@ -1,0 +1,161 @@
+---
+/**
+ * Testimonials.astro — Google review cards with star ratings.
+ */
+import { testimonialsData } from '../data/translations.js';
+---
+
+<section class="testimonials section-padding" id="testimonios">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 data-i18n-es="Lo Que Dicen Nuestros Clientes" data-i18n-en="What Our Clients Say">Lo Que Dicen Nuestros Clientes</h2>
+      <p data-i18n-es="Opiniones reales de Google" data-i18n-en="Real reviews from Google">Opiniones reales de Google</p>
+    </div>
+
+    <div class="testimonials__grid">
+      {testimonialsData.map((t, idx) => (
+        <article class="testimonials__card reveal" style={`animation-delay: ${idx * 0.2}s`}>
+          <!-- Google badge -->
+          <div class="testimonials__google-badge">
+            <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0124 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 01-4.087 5.571l.001-.001 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+          </div>
+
+          <!-- Reviewer info -->
+          <div class="testimonials__header">
+            <div class="testimonials__avatar">
+              {t.name.charAt(0)}
+            </div>
+            <div class="testimonials__meta">
+              <h4 class="testimonials__name">{t.name}</h4>
+              <span class="testimonials__info" data-i18n-es={t.meta.es} data-i18n-en={t.meta.en}>{t.meta.es}</span>
+            </div>
+          </div>
+
+          <!-- Stars -->
+          <div class="testimonials__stars">
+            {Array.from({ length: t.rating }).map(() => (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBC04"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            ))}
+            <span
+              class="testimonials__time"
+              data-i18n-es={idx === 0 ? 'Hace un año' : 'Hace 3 años'}
+              data-i18n-en={idx === 0 ? 'A year ago' : '3 years ago'}
+            >
+              {idx === 0 ? 'Hace un año' : 'Hace 3 años'}
+            </span>
+          </div>
+
+          <!-- Review text -->
+          <p class="testimonials__text" data-i18n-es={t.review.es} data-i18n-en={t.review.en}>
+            {t.review.es}
+          </p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    background: var(--cream-soft);
+  }
+
+  .testimonials__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .testimonials__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .testimonials__card {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--gold-warm);
+    position: relative;
+    transition: all var(--transition-base);
+  }
+
+  .testimonials__card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+  }
+
+  .testimonials__google-badge {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    opacity: 0.8;
+  }
+
+  .testimonials__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .testimonials__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--purple-deep), var(--purple-medium));
+    color: var(--cream-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .testimonials__name {
+    font-size: 1rem;
+    color: var(--purple-deep);
+    margin-bottom: 2px;
+  }
+
+  .testimonials__info {
+    font-size: 0.78rem;
+    color: var(--gray-500);
+  }
+
+  .testimonials__stars {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: var(--space-md);
+  }
+
+  .testimonials__time {
+    margin-left: var(--space-sm);
+    font-size: 0.78rem;
+    color: var(--gray-500);
+  }
+
+  .testimonials__text {
+    font-size: 0.92rem;
+    color: var(--gray-700);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .testimonials__text::before {
+    content: '"';
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--gold-warm);
+    line-height: 0;
+    margin-right: 4px;
+    vertical-align: -0.4em;
+  }
+</style>

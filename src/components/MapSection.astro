@@ -1,0 +1,99 @@
+---
+/**
+ * MapSection.astro — Embedded Google Maps iframe with styled frame
+ * and "Get Directions" CTA button.
+ */
+---
+
+<section class="map-section section-padding" id="mapa">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 data-i18n-es="Encuéntranos" data-i18n-en="Find Us">Encuéntranos</h2>
+      <p data-i18n-es="Ubicados en el corazón de Pozos" data-i18n-en="Located in the heart of Pozos">
+        Ubicados en el corazón de Pozos
+      </p>
+    </div>
+
+    <div class="map-section__wrapper reveal">
+      <div class="map-section__frame">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3696.7869351901386!2d-100.8685562!3d22.0959525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842a9f4aa8e379b1%3A0x9fc344784c4f0af8!2sBandh%C3%BA%20Spa!5e0!3m2!1ses-419!2smx!4v1776131343068!5m2!1ses-419!2smx"
+          width="100%"
+          height="450"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Bandhú Spa Location Map"
+        ></iframe>
+      </div>
+
+      <div class="map-section__cta">
+        <a
+          href="https://maps.google.com/?q=Bandhú+Spa+Cto.+San+Miguel+139+Pozos+SLP"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-primary"
+          data-i18n-es="Cómo Llegar"
+          data-i18n-en="Get Directions"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          Cómo Llegar
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .map-section {
+    background: var(--cream-soft);
+  }
+
+  .map-section__wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .map-section__frame {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 3px solid var(--gold-warm);
+  }
+
+  .map-section__frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-lg);
+    pointer-events: none;
+    z-index: 1;
+    box-shadow: inset 0 0 30px rgba(74, 21, 58, 0.1);
+  }
+
+  .map-section__frame iframe {
+    display: block;
+    width: 100%;
+    height: 350px;
+  }
+
+  @media (min-width: 768px) {
+    .map-section__frame iframe {
+      height: 450px;
+    }
+  }
+
+  .map-section__cta {
+    text-align: center;
+    margin-top: var(--space-xl);
+  }
+
+  .map-section__cta .btn {
+    gap: var(--space-sm);
+  }
+</style>

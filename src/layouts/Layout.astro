@@ -1,23 +1,147 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+/**
+ * Layout.astro — Base HTML shell for Bandhú Spa
+ * Loads fonts, global CSS, SEO meta, and favicon.
+ */
+import '../styles/global.css';
+---
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+<!doctype html>
+<html lang="es" data-lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- SEO -->
+    <title>Bandhú Spa | Bienestar & Relajación en Pozos, S.L.P.</title>
+    <meta name="description" content="Bandhú Spa — Tu santuario de bienestar en Pozos, San Luis Potosí. Masajes terapéuticos, tratamientos faciales, moldeado corporal y más. Reserva ahora." />
+    <meta name="keywords" content="spa, masajes, facial, bienestar, relajación, pozos, san luis potosi, bandhu" />
+    <meta name="author" content="Bandhú Spa" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Bandhú Spa | Bienestar & Relajación" />
+    <meta property="og:description" content="Descubre la armonía entre cuerpo y mente. Masajes, faciales y más en Pozos, S.L.P." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/logo-hero.png" />
+
+    <!-- Google Fonts: Playfair Display + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+
+
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Global bilingual engine + cart state + initialization -->
+    <script is:inline>
+      (function() {
+        /* ── Translation Engine (no page refresh) ── */
+        window.SPA_LANG = localStorage.getItem('bandhu-lang') || 'es';
+        document.documentElement.setAttribute('data-lang', window.SPA_LANG);
+        document.documentElement.setAttribute('lang', window.SPA_LANG);
+
+        window.setLanguage = function(lang) {
+          window.SPA_LANG = lang;
+          localStorage.setItem('bandhu-lang', lang);
+          document.documentElement.setAttribute('data-lang', lang);
+          document.documentElement.setAttribute('lang', lang);
+          document.querySelectorAll('[data-i18n-es]').forEach(function(el) {
+            el.textContent = el.getAttribute('data-i18n-' + lang) || el.textContent;
+          });
+          document.querySelectorAll('[data-i18n-placeholder-es]').forEach(function(el) {
+            el.placeholder = el.getAttribute('data-i18n-placeholder-' + lang) || el.placeholder;
+          });
+          /* Dispatch event for dynamic content */
+          window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
+        };
+
+        /* ── Cart State ── */
+        window.SPA_CART = JSON.parse(localStorage.getItem('bandhu-cart') || '[]');
+
+        window.saveCart = function() {
+          localStorage.setItem('bandhu-cart', JSON.stringify(window.SPA_CART));
+          window.dispatchEvent(new CustomEvent('cartUpdated'));
+        };
+
+        window.addToCart = function(service) {
+          var existing = window.SPA_CART.find(function(item) { return item.id === service.id; });
+          if (existing) {
+            existing.qty += 1;
+          } else {
+            window.SPA_CART.push({
+              id: service.id,
+              name: service.name,
+              price: service.price,
+              image: service.image,
+              qty: 1,
+            });
+          }
+          window.saveCart();
+        };
+
+        window.removeFromCart = function(id) {
+          window.SPA_CART = window.SPA_CART.filter(function(item) { return item.id !== id; });
+          window.saveCart();
+        };
+
+        window.updateCartQty = function(id, delta) {
+          var item = window.SPA_CART.find(function(i) { return i.id === id; });
+          if (!item) return;
+          item.qty += delta;
+          if (item.qty <= 0) {
+            window.removeFromCart(id);
+            return;
+          }
+          window.saveCart();
+        };
+
+        window.getCartTotal = function() {
+          return window.SPA_CART.reduce(function(sum, item) {
+            return sum + (item.price * item.qty);
+          }, 0);
+        };
+
+        window.getCartCount = function() {
+          return window.SPA_CART.reduce(function(sum, item) {
+            return sum + item.qty;
+          }, 0);
+        };
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+
+    <script is:inline>
+      (function() {
+        /* Apply stored language on load */
+        document.addEventListener('DOMContentLoaded', function() {
+          window.setLanguage(window.SPA_LANG);
+
+          /* ── Scroll Reveal ── */
+          var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+          document.querySelectorAll('.reveal').forEach(function(el) {
+            observer.observe(el);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>
