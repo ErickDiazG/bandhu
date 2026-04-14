@@ -6,10 +6,10 @@
 import { servicesData } from '../data/translations.js';
 
 const categories = [
-  { key: 'massage', labelEs: 'Masajes & Relajación', labelEn: 'Massage & Relaxation', icon: '💆' },
-  { key: 'facial', labelEs: 'Tratamientos Faciales', labelEn: 'Facial Treatments', icon: '✨' },
-  { key: 'body', labelEs: 'Tratamientos Corporales', labelEn: 'Body Treatments', icon: '🧖' },
-  { key: 'beauty', labelEs: 'Servicios de Belleza', labelEn: 'Beauty Services', icon: '💅' },
+  { key: 'massage', labelEs: 'Masajes & Relajación', labelEn: 'Massage & Relaxation' },
+  { key: 'facial', labelEs: 'Tratamientos Faciales', labelEn: 'Facial Treatments' },
+  { key: 'body', labelEs: 'Tratamientos Corporales', labelEn: 'Body Treatments' },
+  { key: 'beauty', labelEs: 'Servicios de Belleza', labelEn: 'Beauty Services' },
 ];
 ---
 
@@ -32,7 +32,6 @@ const categories = [
           role="tab"
           aria-selected={idx === 0 ? 'true' : 'false'}
         >
-          <span class="modal__tab-icon">{cat.icon}</span>
           <span data-i18n-es={cat.labelEs} data-i18n-en={cat.labelEn}>{cat.labelEs}</span>
         </button>
       ))}
@@ -156,14 +155,16 @@ const categories = [
     transform: rotate(90deg);
   }
 
-  /* Tabs */
   .modal__tabs {
     display: flex;
     overflow-x: auto;
-    gap: 0;
-    background: var(--white);
-    border-bottom: 2px solid var(--cream-dark);
+    align-items: center; /* Ensure all buttons stay centered */
+    gap: 0.75rem;
+    padding: 0.85rem 1.25rem;
+    background: var(--purple-deep);
     scrollbar-width: none;
+    -ms-overflow-style: none;
+    min-height: 3.5rem; /* Force a consistent container height */
   }
 
   .modal__tabs::-webkit-scrollbar {
@@ -171,33 +172,39 @@ const categories = [
   }
 
   .modal__tab {
-    flex: 1;
-    min-width: max-content;
-    padding: var(--space-md) var(--space-lg);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--gray-500);
+    flex: 0 0 auto;
+    padding: 0.55rem 1.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.2; /* Fixed line-height for consistency */
+    letter-spacing: 0.03em;
+    color: rgba(245, 237, 224, 0.6);
     transition: all var(--transition-fast);
-    border-bottom: 3px solid transparent;
     display: flex;
     align-items: center;
-    gap: var(--space-xs);
+    justify-content: center;
     white-space: nowrap;
+    border-radius: 50px;
+    background: transparent;
+    border: 1px solid rgba(245, 237, 224, 0.1);
+    height: fit-content;
   }
 
   .modal__tab.active {
     color: var(--purple-deep);
-    border-bottom-color: var(--orange-accent);
     background: var(--cream-soft);
+    border-color: var(--cream-soft);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
-  .modal__tab:hover {
-    color: var(--purple-deep);
-    background: var(--cream-soft);
+  .modal__tab:hover:not(.active) {
+    color: var(--cream-soft);
+    background: rgba(255, 255, 255, 0.08);
   }
 
   .modal__tab-icon {
-    font-size: 1.1rem;
+    display: none; /* Ensure no ghost space from icons */
   }
 
   /* Body */
@@ -303,8 +310,8 @@ const categories = [
       height: 150px;
     }
     .modal__tab {
-      padding: var(--space-sm) var(--space-md);
-      font-size: 0.78rem;
+      font-size: 0.75rem;
+      padding: 0.45rem 1rem;
     }
     .modal__tab-icon {
       display: none;

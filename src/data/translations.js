@@ -127,9 +127,9 @@ export const translations = {
       submit: 'Confirmar por WhatsApp',
       cancel: 'Cancelar',
       warnings: {
-        allFields: '⚠️ Todos los campos son obligatorios',
-        pastDate: '⚠️ No puedes seleccionar una fecha que ya pasó',
-        sunday: '⚠️ Los domingos estamos cerrados. Elige otro día',
+        allFields: 'Todos los campos son obligatorios',
+        pastDate: 'No puedes seleccionar una fecha que ya pasó',
+        sunday: 'Los domingos estamos cerrados. Elige otro día',
       },
     },
 
@@ -263,9 +263,9 @@ export const translations = {
       submit: 'Confirm via WhatsApp',
       cancel: 'Cancel',
       warnings: {
-        allFields: '⚠️ All fields are required',
-        pastDate: '⚠️ You cannot select a past date',
-        sunday: '⚠️ We are closed on Sundays. Please choose another day',
+        allFields: 'All fields are required',
+        pastDate: 'You cannot select a past date',
+        sunday: 'We are closed on Sundays. Please choose another day',
       },
     },
 
